@@ -71,7 +71,7 @@ mongo.connect("mongodb://localhost", function(err, client){
             let type = data.type;
             let rating = data.rating;
             let warranty_years = data.warranty_years;
-            let availabe = data.availabe;
+            let available = data.available;
              
             if (name == '' || price == '' || type == ''  || rating == ''  || warranty_years == ''  || availabe == '' ){
                 //j'envoie un status d'error
@@ -83,7 +83,7 @@ mongo.connect("mongodb://localhost", function(err, client){
                     type: type,
                     rating: rating,
                     warranty_years: warranty_years,
-                    availabe: availabe,
+                    available: available,
                 }, function(){
                     socket.emit('output', [data]);
                     sendStatus({
