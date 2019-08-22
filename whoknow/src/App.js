@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import socketIOClient from "socket.io-client";
+import Button from '@material-ui/core/Button';
 
 var socket;
 
@@ -59,6 +60,7 @@ class App extends Component {
   //     );
   //   });
   // }
+ 
   render() {
     // const { response } = this.state;*
     console.log(this.state.products)
@@ -74,7 +76,12 @@ class App extends Component {
             <td> {product.available} </td>
 
             <td>
-              <button onClick={() => this.createProduct(product._id)}>Create</button>
+              <Button variant="contained" color="primary"
+              onClick={() => this.createProduct(product._id)}
+              >
+                Create
+              </Button>
+
             </td>
           </tr>
         </div>

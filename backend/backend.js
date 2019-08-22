@@ -12,7 +12,7 @@ const app = express()
 const server = http.createServer(app)
 
 // This creates our socket using the instance of the server
-const io = socketIO(server)
+const io = socketIO(server);
 
 // Use connect method to connect to the server
 mongo.connect("mongodb://localhost", function(err, client){
@@ -38,12 +38,62 @@ mongo.connect("mongodb://localhost", function(err, client){
         // sendStatus = function(x){
         //     socket.emit('status', x)
         // }
-        db.collection('products').findOne({}, function (findErr, res) {
-            if (findErr) throw findErr;
-            // console.log(res);
-            
-            socket.emit("output", res);
-            console.log(res, "OKKKKKKK")
+        // db.collection('products').find()
+        //     .toArray((findErr, res) => {
+        //         if (findErr) throw findErr;
+        //         // console.log(res);
+                
+        //         socket.emit("output", res);
+        //         res.forEach((value)=>{
+        //             console.log(value, "OKKKKKKK")
+        //         })
+        //     });
+        // });
+        socket.on('all_products', () => {
+            db.collection('products').find()
+            .toArray((findErr, res) => {
+                if (findErr) throw findErr;
+                // console.log(res);
+                
+                socket.emit("output", res);
+                res.forEach((value)=>{
+                    console.log(value, "OKKKKKKK")
+                })
+            });
+        });
+        
+
+        //je prend les valeurs des inputs
+        socket.on('in', function(data){
+            let name = data.name;
+            let price = data.price;
+            let type = data.type;
+            let rating = data.rating;
+            let warranty_years = data.warranty_years;
+            let available = data.available;
+             
+            if (name == '' || price == '' || type == ''  || rating == ''  || warranty_years == ''  || availabe == '' ){
+                //j'envoie un status d'error
+                sendStatus("Rentré les valeurs attribué")
+            } else {
+                db.insert({
+                    name: name,
+                    price: price,
+                    type: type,
+                    rating: rating,
+                    warranty_years: warranty_years,
+                    available: available,
+                }, function(){
+                    socket.emit('output', [data]);
+                    sendStatus({
+                        message: 'produit créer'
+                    })
+                })
+            }
+        })
+
+        socket.on('disconnect', () => {
+            console.log('client disconnected')
         })
     })
 })
@@ -59,3 +109,14 @@ mongo.connect("mongodb://localhost", function(err, client){
 // This is what the socket.io syntax is like, we will work this later
 
 server.listen(port, () => console.log(`Listening on port ${port}`))
+
+// db.collection('products').find()
+// .toArray((findErr, res) => {
+//     if (findErr) throw findErr;
+//     // console.log(res);
+    
+//     socket.emit("output", res);
+//     res.forEach((value)=>{
+//         console.log(value, "OKKKKKKK")
+//     })
+// });
