@@ -19,7 +19,7 @@ mongo.connect("mongodb://localhost", function(err, client){
     if(err){
         throw err;
     }
-    console.log('Mongodb est connectée....');
+    console.log('Mongodb est connecté....');
     
     //je récupère le nom de ma DB
 
@@ -32,71 +32,19 @@ mongo.connect("mongodb://localhost", function(err, client){
     // });
 
     io.on("connection", socket => {
-        console.log('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP')
-        //  console.log("New client connected" + socket.id);
-          //console.log(socket);
-        // Returning the initial data of food menu from FoodItems collection
-        socket.on("initial_data", () => {
-            var db = client.db('productslist');
-
-            db.collection('products').find({}, function (findErr, result) {
-                if (findErr) throw findErr;
-                console.log(result)
-            });
-        })
-    
- 
-    // io.on('connection', socket => {
-        // var db = client.db('productslist');
 
         console.log('client connected')
 
-        // let product = db.collection('products');
-
-        sendStatus = function(x){
-            socket.emit('status', x)
-        }
-        // collectionP.find('products').findOne({}, function (findErr, res) {
-        //     if (findErr) throw findErr;
-        //     // console.log(res.name);
+        // sendStatus = function(x){
+        //     socket.emit('status', x)
+        // }
+        db.collection('products').findOne({}, function (findErr, res) {
+            if (findErr) throw findErr;
+            // console.log(res);
             
-        //     socket.emit("output", res);
-        //     console.log(res)
-        // })
-
-        //je prend les valeurs des inputs
-        socket.on('in', function(data){
-            let name = data.name;
-            let price = data.price;
-            let type = data.type;
-            let rating = data.rating;
-            let warranty_years = data.warranty_years;
-            let available = data.available;
-             
-            if (name == '' || price == '' || type == ''  || rating == ''  || warranty_years == ''  || availabe == '' ){
-                //j'envoie un status d'error
-                sendStatus("Rentré les valeurs attribué")
-            } else {
-                db.insert({
-                    name: name,
-                    price: price,
-                    type: type,
-                    rating: rating,
-                    warranty_years: warranty_years,
-                    available: available,
-                }, function(){
-                    socket.emit('output', [data]);
-                    sendStatus({
-                        message: 'produit créer'
-                    })
-                })
-            }
+            socket.emit("output", res);
+            console.log(res, "OKKKKKKK")
         })
-
-        socket.on('disconnect', () => {
-            console.log('user disconnected')
-          })
-        
     })
 })
 
