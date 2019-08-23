@@ -38,33 +38,40 @@ mongo.connect("mongodb://localhost", function(err, client){
         // sendStatus = function(x){
         //     socket.emit('status', x)
         // }
-        // db.collection('products').find()
-        //     .toArray((findErr, res) => {
-        //         if (findErr) throw findErr;
-        //         // console.log(res);
-                
-        //         socket.emit("output", res);
-        //         res.forEach((value)=>{
-        //             console.log(value, "OKKKKKKK")
-        //         })
-        //     });
-        // });
-        socket.on('all_products', () => {
-            db.collection('products').find()
-            .toArray((findErr, res) => {
-                if (findErr) throw findErr;
-                // console.log(res);
-                
-                socket.emit("output", res);
-                res.forEach((value)=>{
-                    console.log(value, "OKKKKKKK")
-                })
-            });
+
+        //afficher tous les produits
+        db.collection('products').find()
+        .toArray((findErr, res) => {
+            if (findErr) throw findErr;
+            // console.log(res);
+            
+            socket.emit("output", res);
+            // socket.emit("output", db);
+
+            res.forEach((value)=>{
+                console.log(value, "OKKKKKKK")
+            })
         });
+        
+        //ajouter un produit
+        socket.on('addProduct', (Product) => {
+            console.log('socketData: '+JSON.stringify(Product));
+            // ProductController.addProduct(io,Product);
+          });
+        // Receiving Updated Product from client
+          socket.on('updateProduct', (Product) => {
+            console.log('socketData: '+JSON.stringify(Product));
+            // ProductController.updateProduct(io,Product);
+          });
+        // Receiving Product to Delete
+          socket.on('deleteProduct', (Product) => {
+            console.log('socketData: '+JSON.stringify(Product));
+            // ProductController.deleteProduct(io,Product);
+          });
         
 
         //je prend les valeurs des inputs
-        socket.on('in', function(data){
+        socket.on('input', function(data){
             let name = data.name;
             let price = data.price;
             let type = data.type;
