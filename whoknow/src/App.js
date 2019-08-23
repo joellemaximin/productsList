@@ -38,13 +38,13 @@ class App extends Component {
   componentDidMount() {
     this.socket = io(socketUrl);
     this.socket.on('output', this.handleData)
-    // socket.on("output", data => this.setState({ products: data }));
     // console.log(data)
   }
 
   handleData = (productList) => {
     this.setState({products: productList})
   }
+  
   // setProducts=(product)=>{
   //   const {socket} = this.state
   //   socket.emit()

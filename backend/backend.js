@@ -2,6 +2,9 @@ const express = require("express");
 // const mongoose = require("mongoose");
 const bodyParser = require('body-parser');
 
+//import controller file
+const prodController = require("./controller/productsController");
+
 const mongo = require('mongodb').MongoClient;
 const http = require('http')
 const socketIO = require('socket.io')
@@ -13,6 +16,7 @@ const server = http.createServer(app)
 
 // This creates our socket using the instance of the server
 const io = socketIO(server);
+
 
 // Use connect method to connect to the server
 mongo.connect("mongodb://localhost", function(err, client){
@@ -43,31 +47,31 @@ mongo.connect("mongodb://localhost", function(err, client){
         db.collection('products').find()
         .toArray((findErr, res) => {
             if (findErr) throw findErr;
-            // console.log(res);
             
             socket.emit("output", res);
-            // socket.emit("output", db);
+            // console.log(res);
 
-            res.forEach((value)=>{
-                console.log(value, "OKKKKKKK")
-            })
+            // res.forEach((value)=>{
+            //     console.log(value, "OKKKKKKK")
+            // })
         });
         
         //ajouter un produit
         socket.on('addProduct', (Product) => {
             console.log('socketData: '+JSON.stringify(Product));
-            // ProductController.addProduct(io,Product);
-          });
+            prodController.addProduct(io,Product);
+            console.log('OOOOOOOOOOOOOOOOOOOOOO')
+        });
         // Receiving Updated Product from client
-          socket.on('updateProduct', (Product) => {
+        socket.on('updateProduct', (Product) => {
             console.log('socketData: '+JSON.stringify(Product));
-            // ProductController.updateProduct(io,Product);
-          });
+            prodController.updateProduct(io,Product);
+        });
         // Receiving Product to Delete
-          socket.on('deleteProduct', (Product) => {
+        socket.on('deleteProduct', (Product) => {
             console.log('socketData: '+JSON.stringify(Product));
-            // ProductController.deleteProduct(io,Product);
-          });
+            prodController.deleteProduct(io,Product);
+        });
         
 
         //je prend les valeurs des inputs
@@ -127,3 +131,6 @@ server.listen(port, () => console.log(`Listening on port ${port}`))
 //         console.log(value, "OKKKKKKK")
 //     })
 // });
+
+//import controller file
+module.exports = prodController;

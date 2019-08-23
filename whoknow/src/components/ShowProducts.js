@@ -1,32 +1,24 @@
 import React, { Component } from "react";
 import socketIOClient from "socket.io-client";
 // import "./products.css";
+import { makeStyles } from '@material-ui/core/styles';
+import {Button, TableBody, Table, TableCell, TableHead, TableRow, Paper } from '@material-ui/core';
+
 // The Header creates links that can be used to navigate
 // between routes.
 var socket;
 
 // const useStyles = makeStyles(theme => ({
-//     card: {
-//       maxWidth: 345,
-//     },
-//     media: {
-//       height: 0,
-//       paddingTop: '56.25%', // 16:9
-//     },
-//     expand: {
-//       transform: 'rotate(0deg)',
-//       marginLeft: 'auto',
-//       transition: theme.transitions.create('transform', {
-//         duration: theme.transitions.duration.shortest,
-//       }),
-//     },
-//     expandOpen: {
-//       transform: 'rotate(180deg)',
-//     },
-//     avatar: {
-//       backgroundColor: red[500],
-//     },
+//   root: {
+//     width: '100%',
+//     marginTop: theme.spacing(3),
+//     overflowX: 'auto',
+//   },
+//   table: {
+//     minWidth: 650,
+//   },
 // }));
+
 
 class ShowProducts extends Component {
   constructor() {
@@ -38,28 +30,48 @@ class ShowProducts extends Component {
 
   render(){
     // {console.log(this.state.products)}
+    // const classes = useStyles();
 
     return (
       <div>
-        <p>PRODUCT</p>         
-        
-        {this.props.list.map(prod =>
-            <div key={prod._id} className="prodList">
-              <h2 className="prodName">{prod.name}</h2>
-            </div>
-        )}
+        <p>Liste des produits</p>         
 
-        {/* {this.state.products.map(product =>
-          <div key={product.product_id} id="productContainerRow">
-            <h2 id="productRow" className="Image product">{product.name}</h2>
-            <p>{product.type}</p>
-            <p>{product.price}</p>
-            <p>{product.available}</p>
-            <p>{product.rating}</p>
-            <p>{product.warranty_years}</p>         
-          </div>
-         
-        )}             */}
+        <Button variant="contained" size="large" color="default" align="right">Ajouter un produit</Button>
+
+        <Paper >
+          <Table >
+            <TableHead>
+              <TableRow>
+                <TableCell>Nom du produit</TableCell>
+                <TableCell align="right">Type</TableCell>
+                <TableCell align="right">Price</TableCell>
+                <TableCell align="right">Rating</TableCell>
+                <TableCell align="right">warranty years</TableCell>
+                <TableCell align="right">Disponibilité</TableCell>
+                <TableCell align="center">Options</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.props.list.map(prod =>
+                <TableRow key={prod._id}>
+                  <TableCell component="th" scope="row">
+                  {prod.name}
+                  </TableCell>
+                  <TableCell align="right">{prod.type}</TableCell>
+                  <TableCell align="right">{prod.price}</TableCell>
+                  <TableCell align="right">{prod.rating}</TableCell>
+                  <TableCell align="right">{prod.warranty_years}</TableCell>
+                  <TableCell align="right">{prod.available}</TableCell>
+                  <TableCell>
+                    <Button size="small" variant="contained" color="primary" align="right">Modifier</Button>
+                    <Button size="small" variant="contained" color="secondary" align="right">Supprimer</Button>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </Paper>
+
       </div>  
     );
     
