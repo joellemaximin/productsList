@@ -4,9 +4,6 @@ import { FormControl, Input, Button } from '@material-ui/core';
 import { BrowserRouter as Router,Link } from 'react-router-dom';
 import io from "socket.io-client";
 
-// const {addProduct, updateProduct, deleteProduct} = require('../../backend/controller/productsController');
-// const {Ajouter, Modifier, Supprimer}= require('../../backend/controller/productsController');
-
 var socket;
 var socketUrl = "http://localhost:4001";
 
