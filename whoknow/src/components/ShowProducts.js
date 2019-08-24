@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import socketIOClient from "socket.io-client";
 // import "./products.css";
+
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, TableBody, Table, TableCell, TableHead, TableRow, Paper } from '@material-ui/core';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 // The Header creates links that can be used to navigate
 // between routes.
@@ -28,6 +30,12 @@ class ShowProducts extends Component {
     };
   }
 
+  // onAddproduct(){
+  //   BrowserRouter.push({
+  //     pathname: 'addproduct'
+  //   })
+  // }
+
   render(){
     // {console.log(this.state.products)}
     // const classes = useStyles();
@@ -36,8 +44,11 @@ class ShowProducts extends Component {
       <div>
         <p>Liste des produits</p>         
 
-        <Button variant="contained" size="large" color="default" align="right">Ajouter un produit</Button>
+        <Router>
+          <Link to='/addproduct'>Ajouter un prod</Link>
+        </Router>
 
+        
         <Paper >
           <Table >
             <TableHead>
@@ -63,8 +74,13 @@ class ShowProducts extends Component {
                   <TableCell align="right">{prod.warranty_years}</TableCell>
                   <TableCell align="right">{prod.available}</TableCell>
                   <TableCell>
-                    <Button size="small" variant="contained" color="primary" align="right">Modifier</Button>
-                    <Button size="small" variant="contained" color="secondary" align="right">Supprimer</Button>
+                    <Button variant="contained" color="primary" size="medium" to="/update" >
+                      Modifier
+                    </Button>
+                    
+                    <Button variant="contained" color="secondary" size="medium" to="/delete" >
+                      Supprimer
+                    </Button> 
                   </TableCell>
                 </TableRow>
               )}

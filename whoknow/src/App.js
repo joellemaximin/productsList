@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import Button from '@material-ui/core/Button';
-import { Switch, Route } from "react-router-dom";
+import {Button, Container} from '@material-ui/core';
+import { BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import ShowProducts from './Components/ShowProducts';
+import Update from './Components/Update';
+import AddProduct  from './Components/AddProduct';
 
 var socketUrl = "http://localhost:4001";
 
@@ -12,12 +14,8 @@ class App extends Component {
     this.state = {
       socket: null,
       products: [],
-      name: '',
-      type: '',
-      price: '',
-      available: Boolean,
-      rating: '',
-      warranty_years: '',
+      ajouter: {}
+        
     };
     // socket = socketIOClient(this.state.endpoint);
 
@@ -44,85 +42,52 @@ class App extends Component {
   handleData = (productList) => {
     this.setState({products: productList})
   }
-  
+
+  // onSubmit(ajouter) {
+  //   this.setState({ajouter});
+  // }
+
   // setProducts=(product)=>{
   //   const {socket} = this.state
   //   socket.emit()
   // }
-
-
-
-
 
   // Product = prodItems =>{
   //   console.log(prodItems);
   //   this.setState({products: prodItems});
   // }
 
-  // changeData = () => socket.emit("initial_data");
-
-  // componentDidMount() {
-  //   var state_current = this;
-  //   socket.emit("initial_data");
-  //   socket.on("get_data", this.getData);
-  //   socket.on("change_data", this.changeData);
-  // }
-  // /* When Done gets clicked, this function is called and create event gets emitted which gets listened on the backend explained later on*/
-  // createProduct = id => {
-  //   // console.log(predicted_details);
-  //   socket.emit("create", id);
-  // };
-  // getProductData() {
-  //   return this.state.products.map(product => {
-  //     return (
-  //       <div>
-  //         <tr key={product._id}>
-  //           <td> {product.name} </td>
-  //           <td> {product.type} </td>
-  //           <td> {product.price} </td>
-  //           <td> {product.rating} </td>
-  //           <td> {product.warranty_years} </td>
-  //           <td> {product.available} </td>
-
-  //           <td>
-  //             <button onClick={() => this.createProduct(product._id)}>Create</button>
-  //           </td>
-  //         </tr>
-  //       </div>
-       
-  //     );
-  //   });
-  // }
  
   render() {
-    const { products } = this.state;
+    // const { products } = this.state;
     console.log()
       return (
         <div className="App">
 
-          <h3>APP</h3>
+          <Container maxWidth="md">
+            <h2 align="center">TEST pour une demande d'alternance, fait par MAXIMIN JOELLE</h2>
+            <h3 align="center">Lister des produits depuis mongodb en utilisant par WebSocket, vous pouvez ajouter, modifier et supprimer des produits</h3>
+            <p align="center">Framework CSS demandé : Material UI</p>
+            <Router>
+              <div id="flex-container">
+                <Route exact path="/"/>
+                <Route exact path='/addproduct' component={AddProduct}/> 
+                <Route exact path='/update' component={Update}/>
+              </div>
 
-          <ShowProducts list={this.state.products}/>
+            </Router>
+
+            <ShowProducts list={this.state.products}/>
+            
+          </Container>
+          {/* <AddProduct onSubmit={ajouter => this.onSubmit(ajouter)}/> */}
+
+{/*           
+          <p>
+            {JSON.stringify(this.state.ajouter, null , 2)}
+          </p> */}
         </div>
-        // <div>
-        //   <tr key={product._id}>
-        //     <td> {product.name} </td>
-        //     <td> {product.type} </td>
-        //     <td> {product.price} </td>
-        //     <td> {product.rating} </td>
-        //     <td> {product.warranty_years} </td>
-        //     <td> {product.available} </td>
 
-        //     <td>
-        //       <Button variant="contained" color="primary"
-        //       onClick={() => this.createProduct(product._id)}
-        //       >
-        //         Create
-        //       </Button>
-
-        //     </td>
-        //   </tr>
-        // </div>
       );
     
   }

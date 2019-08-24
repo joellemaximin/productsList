@@ -1,67 +1,168 @@
 import React, { Component } from "react";
-import socketIOClient from "socket.io-client";
 // import "./products.css";
-// The Header creates links that can be used to navigate
-// between routes.
-var socket;
+import { FormControl, Input, Button } from '@material-ui/core';
+import { BrowserRouter as Router,Link } from 'react-router-dom';
+import io from "socket.io-client";
 
-// const useStyles = makeStyles(theme => ({
-//     card: {
-//       maxWidth: 345,
-//     },
-//     media: {
-//       height: 0,
-//       paddingTop: '56.25%', // 16:9
-//     },
-//     expand: {
-//       transform: 'rotate(0deg)',
-//       marginLeft: 'auto',
-//       transition: theme.transitions.create('transform', {
-//         duration: theme.transitions.duration.shortest,
-//       }),
-//     },
-//     expandOpen: {
-//       transform: 'rotate(180deg)',
-//     },
-//     avatar: {
-//       backgroundColor: red[500],
-//     },
-// }));
+// const {addProduct, updateProduct, deleteProduct} = require('../../backend/controller/productsController');
+// const {Ajouter, Modifier, Supprimer}= require('../../backend/controller/productsController');
+
+var socket;
+var socketUrl = "http://localhost:4001";
+
 
 class AddProduct extends Component {
   constructor() {
     super();
     this.state = {
-      products: []
-    };
-  }
+      products: [],
+      name: '',
+      type: '',
+      price: '',
+      available: '',
+      rating: '',
+      warranty_years: '',
 
-  render(){
-    // {console.log(this.state.products)}
+    };     
+    
+    this.onChange = this.onChange.bind(this)
+    this.onSubmit = this.onSubmit.bind(this)
+   }
+   
+    componentWillMount(){
+        this.initiateSocket()
+    }
+
+    initiateSocket = () =>{
+        const socket = io(socketUrl)
+        socket.on('connect', ()=>{
+        console.log("Connecté!!")
+        })
+        this.setState({socket})
+    }
+    onChange(e){
+        this.setState({[e.target.name]: e.target.value})
+    }
+
+
+    componentDidMount() {
+        this.socket = io(socketUrl);
+        this.socket.on('Ajouter',(ajouter)=> {
+            const data = JSON.parse(ajouter)
+            console.log(ajouter)
+        })
+        // console.log(data)
+    }
+    //recuperer la méthode ajouter depuis le backend 
+
+    addProduct = newProduct => {
+        console.log(newProduct);
+        this.socket = io(socketUrl);
+        socket.emit('Ajouter', this.handleAdd);
+    };
+
+    onSubmit(e){
+        e.preventDefault();
+        // this.props.onSubmit(this.state);
+        console.log(this.state);
+        const newProduct = this.state;
+        console.log(this.state.products.push(newProduct))
+        // socket.on('Ajouter', this.addProduct)
+        
+    };
+
+
+    // handleAdd = (ajoutonProd) => {
+    //     this.setState({products: ajoutonProd})
+    //     console.log(ajoutonProd)
+    // }
+    
+    render(){
+    const { name } = this.state
 
     return (
       <div>
         <h2>Ajouter un produit ici</h2>         
         
-        <button>Retour liste de produits</button>
+        <Link to="/">
+          Retour
+        </Link>
+        <br/>
+        <br/>
 
-        <input
-            onChange={e => this.changeName (e, food._id)}
-            value={food.order}
-            type="number"
-            placeholder="Quantity"
-        />
-        {/* {this.state.products.map(product =>
-          <div key={product.product_id} id="productContainerRow">
-            <h2 id="productRow" className="Image product">{product.name}</h2>
-            <p>{product.type}</p>
-            <p>{product.price}</p>
-            <p>{product.available}</p>
-            <p>{product.rating}</p>
-            <p>{product.warranty_years}</p>         
-          </div>
-         
-        )}             */}
+        <form onSubmit={this.onSubmit}>
+            <Input
+                fullWidth={true}
+                value={this.state.name}
+                placeholder="name"
+                name="name"
+                value={name}
+                onChange={this.onChange}
+                // inputProps={{
+                // 'aria-label': 'description',
+                // }}
+            />
+            <br/>
+            <Input
+                fullWidth={true}
+                value={this.state.type}
+                name="type"           
+                onChange={this.onChange}
+                placeholder="type"
+                inputProps={{
+                'aria-label': 'description',
+                }}
+            />
+            <br/>
+            <Input
+                fullWidth={true}
+                value={this.state.price}
+                name="price"           
+                onChange={this.onChange}
+                placeholder="price"
+                // inputProps={{
+                // 'aria-label': 'description',
+                // }}
+            />
+            <br/>
+            <Input
+                fullWidth={true}
+                value={this.state.warranty_years}
+                name="warranty_years"           
+                onChange={this.onChange}
+                placeholder="warranty_years"
+                // inputProps={{
+                // 'aria-label': 'description',
+                // }}
+            />
+            <br/>
+            <Input
+                fullWidth={true}
+                value={this.state.rating}
+                name="rating"           
+                onChange={this.onChange}
+                placeholder="rating"
+                // inputProps={{
+                // 'aria-label': 'description',
+                // }}
+            />
+            <br/>
+            <Input
+                fullWidth={true}
+                value={this.state.available}
+                name="available"         
+                onChange={this.onChange}
+                placeholder="available"
+                // inputProps={{
+                // 'aria-label': 'description',
+                // }}
+            />
+            <Button type="submit"
+            className="btn btn-default"
+            onClick={this.onSubmit}>
+                Ajouter
+            </Button>
+        </form>
       </div>  
     );
     

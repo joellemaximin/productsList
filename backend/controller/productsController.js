@@ -21,7 +21,7 @@ const addProduct = (io,T) => {
     }
     else{
       const result = {'success':true,'message':'Product Added Successfully',product}
-       io.emit('Ajouté', result);
+       io.emit('Ajouter', result);
     }
   })
 }
@@ -36,7 +36,7 @@ const updateProduct = (io,T) => {
     }
     else{
      result = {'success':true,'message':'Product Updated Successfully',product};
-     io.emit('Modifié', result);
+     io.emit('Modifier', result);
     }
   })
 }
@@ -64,8 +64,8 @@ const deleteProduct = (io,T) => {
     result = {'success':false,'message':'Some Error','error':err};
     console.log(result);
     }
-result = {'success':true,'message':product.productText+'Product deleted successfully'};
-    io.emit('Supprimé', result);
+    result = {'success':true,'message':product.productText+'Product deleted successfully'};
+    io.emit('Supprimer', result);
   })
 }
 module.exports = addProduct, getProd, getProducts, deleteProduct, updateProduct

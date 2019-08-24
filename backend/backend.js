@@ -55,7 +55,7 @@ mongo.connect("mongodb://localhost", function(err, client){
             //     console.log(value, "OKKKKKKK")
             // })
         });
-        
+         
         //ajouter un produit
         socket.on('addProduct', (Product) => {
             console.log('socketData: '+JSON.stringify(Product));
